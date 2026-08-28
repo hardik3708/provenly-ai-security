@@ -42,9 +42,26 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* Provenly custom properties */
+:root {
+  --provenly-dark: #121212;
+  --provenly-dark-card: #1A1A1A;
+  --provenly-dark-surface: #222222;
+  --provenly-light: #F2F3F4;
+  --provenly-light-card: #FFFFFF;
+  --provenly-rust: #C8442C;
+  --provenly-rust-hover: #B83A24;
+  --provenly-mint: #8ED7A3;
+  --provenly-mint-dim: #6BC08A;
+  --provenly-border-dark: rgba(255, 255, 255, 0.08);
+  --provenly-border-light: rgba(0, 0, 0, 0.08);
+  --provenly-text-secondary: rgba(255, 255, 255, 0.6);
+  --provenly-text-secondary-dark: rgba(0, 0, 0, 0.5);
+}
+
 /* CHANGE VALUES FOR THEME */
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -118,6 +135,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter Tight', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   button:not([disabled]),
   [role="button"]:not([disabled]) {
