@@ -2,6 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { playClick, playHover, resumeAudio } from "@/lib/sounds";
+import { ScrollReveal, TextReveal, StaggerChildren, staggerItem } from "./animations";
 
 const cases = [
   {
@@ -45,35 +46,31 @@ export default function CaseStudies() {
     >
       <div className="mx-auto max-w-[1320px] px-6 lg:px-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-14"
-        >
-          <div>
-            <h2 className="text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.15] tracking-tight text-[#121212]">
-              Securing businesses with{" "}
-              <span className="text-[#C8442C]">confidence</span>
-            </h2>
-          </div>
-          <a
-            href="#"
-            onClick={() => { resumeAudio(); playClick(); }}
-            className="mt-4 sm:mt-0 inline-flex items-center px-5 py-2 bg-[#C8442C] text-white text-[13px] font-medium rounded-full hover:bg-[#B83A24] transition-all duration-300 self-start sm:self-auto"
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-14">
+          <TextReveal
+            as="h2"
+            className="text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.15] tracking-tight text-[#121212]"
           >
-            View all
-          </a>
-        </motion.div>
+            Securing businesses with{" "}
+            <span className="text-[#C8442C]">confidence</span>
+          </TextReveal>
+          <ScrollReveal delay={0.2}>
+            <a
+              href="#"
+              onClick={() => { resumeAudio(); playClick(); }}
+              className="mt-4 sm:mt-0 inline-flex items-center px-5 py-2 bg-[#C8442C] text-white text-[13px] font-medium rounded-full hover:bg-[#B83A24] transition-all duration-300 self-start sm:self-auto"
+            >
+              View all
+            </a>
+          </ScrollReveal>
+        </div>
 
         {/* Case study rows */}
-        <div className="space-y-6">
-          {cases.map((cs, i) => (
+        <StaggerChildren stagger={0.15} className="space-y-6">
+          {cases.map((cs) => (
             <motion.div
               key={cs.company}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.15 + i * 0.12 }}
+              variants={staggerItem}
               className="group grid grid-cols-1 lg:grid-cols-12 gap-0 bg-white border border-black/[0.04] hover:shadow-lg hover:shadow-black/[0.04] transition-all duration-500"
             >
               {/* Left: Content */}
@@ -108,10 +105,13 @@ export default function CaseStudies() {
                 </a>
               </div>
 
-              {/* Right: Image placeholder */}
-              <div className="lg:col-span-5 relative overflow-hidden min-h-[220px]" onMouseEnter={() => { resumeAudio(); playHover(); }}>
+              {/* Right: Image with parallax hover */}
+              <div
+                className="lg:col-span-5 relative overflow-hidden min-h-[220px]"
+                onMouseEnter={() => { resumeAudio(); playHover(); }}
+              >
                 <div
-                  className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
+                  className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                   style={{ background: cs.image }}
                 />
                 {/* Red light fixture element */}
@@ -124,7 +124,7 @@ export default function CaseStudies() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </StaggerChildren>
       </div>
     </section>
   );

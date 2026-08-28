@@ -2,6 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Shield } from "lucide-react";
 import { playHover, playClick, resumeAudio } from "@/lib/sounds";
+import { ScrollReveal, TextReveal, StaggerChildren, staggerItem, LineReveal } from "./animations";
 
 const services = [
   {
@@ -77,40 +78,34 @@ export default function Services() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
           {/* Left: Title */}
           <div className="lg:col-span-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-            >
+            <ScrollReveal direction="up">
               <div className="inline-flex items-center gap-2 mb-6">
                 <Shield className="w-4 h-4 text-[#C8442C] stroke-[1.8]" />
                 <span className="text-[11px] font-semibold text-[#C8442C] tracking-widest uppercase">
                   Services
                 </span>
               </div>
-              <h2 className="text-[clamp(2rem,4vw,3rem)] font-light leading-[1.12] tracking-tight text-white">
+              <TextReveal
+                as="h2"
+                delay={0.1}
+                className="text-[clamp(2rem,4vw,3rem)] font-light leading-[1.12] tracking-tight text-white"
+              >
                 Security that never{" "}
                 <span className="text-[#8ED7A3]">sleeps</span>
-              </h2>
+              </TextReveal>
               <p className="mt-5 text-[15px] text-white/40 leading-relaxed max-w-sm font-light">
                 Comprehensive protection across every layer of your digital
                 infrastructure, powered by continuous AI monitoring.
               </p>
-            </motion.div>
+            </ScrollReveal>
           </div>
 
-          {/* Right: Cards grid */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {services.map((svc, i) => (
+          {/* Right: Cards grid with stagger */}
+          <StaggerChildren stagger={0.1} delay={0.15} className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {services.map((svc) => (
               <motion.div
                 key={svc.title}
-                initial={{ opacity: 0, y: 24 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.15 + i * 0.1,
-                  ease: "easeOut",
-                }}
+                variants={staggerItem}
                 onMouseEnter={() => { resumeAudio(); playHover(); }}
                 className="group relative bg-white/[0.04] border border-white/[0.06] p-6 hover:bg-white/[0.06] transition-all duration-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20"
               >
@@ -139,7 +134,7 @@ export default function Services() {
                 </h3>
 
                 {/* Divider */}
-                <div className="w-full h-px bg-white/[0.06] mb-3" />
+                <LineReveal color="rgba(255,255,255,0.06)" className="mb-3" />
 
                 {/* Description */}
                 <p className="text-[13px] text-white/40 leading-relaxed font-light">
@@ -150,9 +145,7 @@ export default function Services() {
 
             {/* CTA Block */}
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.55, ease: "easeOut" }}
+              variants={staggerItem}
               className="flex flex-col items-center justify-center bg-[#C8442C]/[0.08] border border-[#C8442C]/20 p-6 text-center"
             >
               <p className="text-sm text-white/60 font-light mb-4">
@@ -166,7 +159,7 @@ export default function Services() {
                 More services
               </a>
             </motion.div>
-          </div>
+          </StaggerChildren>
         </div>
       </div>
     </section>

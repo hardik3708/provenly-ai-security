@@ -1,6 +1,7 @@
 /**
- * Lightweight Web Audio API sound effects for Provenly.
- * All sounds are synthesized at runtime — no external audio files needed.
+ * Provenly sound effects — minimal, professional, warm.
+ * Inspired by Apple, Linear, and Vercel interactions.
+ * All sounds are synthesized at runtime — no external audio files.
  */
 
 let ctx: AudioContext | null = null;
@@ -12,213 +13,82 @@ function getCtx(): AudioContext {
   return ctx;
 }
 
-/** Resume context on first user gesture (Chrome autoplay policy). */
 export function resumeAudio() {
   try {
     getCtx().resume();
   } catch {
-    // silent — Web Audio may not be available
+    /* silent */
   }
 }
 
 /* ------------------------------------------------------------------ */
-/*  Sound generators                                                   */
+/*  Internal helpers                                                   */
 /* ------------------------------------------------------------------ */
 
-/**
- * Short, crisp digital click — used for primary CTA buttons.
- * A quick sine blip at ~1200 Hz with fast decay.
- */
+function softTone(freq: number, duration: number, vol: number, type: OscillatorType = "sine") {
+  try {
+    const ac = getCtx();
+    const now = ac.currentTime;
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(vol, now + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc.connect(gain).connect(ac.destination);
+    osc.start(now);
+    osc.stop(now + duration + 0.01);
+  } catch {
+    /* silent */
+  }
+}
+
+function warmClick() {
+  softTone(520, 0.06, 0.04, "sine");
+  setTimeout(() => softTone(440, 0.04, 0.02, "sine"), 8);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Public API                                                         */
+/* ------------------------------------------------------------------ */
+
+/** Primary CTA button — warm, barely-there tap */
 export function playClick() {
-  try {
-    const ac = getCtx();
-    const now = ac.currentTime;
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
-
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(1200, now);
-    osc.frequency.exponentialRampToValueAtTime(800, now + 0.06);
-
-    gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-
-    osc.connect(gain).connect(ac.destination);
-    osc.start(now);
-    osc.stop(now + 0.1);
-  } catch {
-    /* silent */
-  }
+  warmClick();
 }
 
-/**
- * Softer secondary click — used for secondary/ghost buttons.
- * Slightly lower pitch and quieter.
- */
+/** Secondary / ghost button — slightly softer */
 export function playClickSoft() {
-  try {
-    const ac = getCtx();
-    const now = ac.currentTime;
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
-
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(900, now);
-    osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
-
-    gain.gain.setValueAtTime(0.07, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-
-    osc.connect(gain).connect(ac.destination);
-    osc.start(now);
-    osc.stop(now + 0.08);
-  } catch {
-    /* silent */
-  }
+  softTone(380, 0.05, 0.025, "sine");
 }
 
-/**
- * Subtle hover tick — very quiet, barely perceptible.
- * Short high-frequency blip.
- */
+/** Card hover — micro-tick, nearly subliminal */
 export function playHover() {
-  try {
-    const ac = getCtx();
-    const now = ac.currentTime;
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
-
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(2000, now);
-
-    gain.gain.setValueAtTime(0.03, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-
-    osc.connect(gain).connect(ac.destination);
-    osc.start(now);
-    osc.stop(now + 0.04);
-  } catch {
-    /* silent */
-  }
+  softTone(1800, 0.025, 0.015, "sine");
 }
 
-/**
- * Tab switch / toggle sound — two quick micro-tones.
- * Used for testimonial tabs and dropdown toggles.
- */
+/** Tab switch / toggle — two soft micro-tones */
 export function playSwitch() {
-  try {
-    const ac = getCtx();
-    const now = ac.currentTime;
-
-    // First tone
-    const osc1 = ac.createOscillator();
-    const gain1 = ac.createGain();
-    osc1.type = "sine";
-    osc1.frequency.setValueAtTime(1400, now);
-    gain1.gain.setValueAtTime(0.06, now);
-    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-    osc1.connect(gain1).connect(ac.destination);
-    osc1.start(now);
-    osc1.stop(now + 0.05);
-
-    // Second tone (delayed)
-    const osc2 = ac.createOscillator();
-    const gain2 = ac.createGain();
-    osc2.type = "sine";
-    osc2.frequency.setValueAtTime(1800, now + 0.04);
-    gain2.gain.setValueAtTime(0, now);
-    gain2.gain.setValueAtTime(0.05, now + 0.04);
-    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-    osc2.connect(gain2).connect(ac.destination);
-    osc2.start(now + 0.04);
-    osc2.stop(now + 0.1);
-  } catch {
-    /* silent */
-  }
+  softTone(600, 0.04, 0.025, "sine");
+  setTimeout(() => softTone(750, 0.035, 0.02, "sine"), 20);
 }
 
-/**
- * Navigation link click — muted, low-pitched tap.
- */
+/** Navigation link — muted, warm */
 export function playNav() {
-  try {
-    const ac = getCtx();
-    const now = ac.currentTime;
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
-
-    osc.type = "triangle";
-    osc.frequency.setValueAtTime(600, now);
-    osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
-
-    gain.gain.setValueAtTime(0.06, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-
-    osc.connect(gain).connect(ac.destination);
-    osc.start(now);
-    osc.stop(now + 0.06);
-  } catch {
-    /* silent */
-  }
+  softTone(420, 0.045, 0.02, "triangle");
 }
 
-/**
- * Shield verification / success — gentle ascending two-note chime.
- * Used for the hero shield appearance.
- */
+/** Success / verification — gentle ascending two-note chime */
 export function playSuccess() {
-  try {
-    const ac = getCtx();
-    const now = ac.currentTime;
-
-    // Note 1
-    const osc1 = ac.createOscillator();
-    const gain1 = ac.createGain();
-    osc1.type = "sine";
-    osc1.frequency.setValueAtTime(800, now);
-    gain1.gain.setValueAtTime(0.08, now);
-    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-    osc1.connect(gain1).connect(ac.destination);
-    osc1.start(now);
-    osc1.stop(now + 0.22);
-
-    // Note 2 (higher, delayed)
-    const osc2 = ac.createOscillator();
-    const gain2 = ac.createGain();
-    osc2.type = "sine";
-    osc2.frequency.setValueAtTime(1200, now + 0.12);
-    gain2.gain.setValueAtTime(0, now);
-    gain2.gain.setValueAtTime(0.06, now + 0.12);
-    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-    osc2.connect(gain2).connect(ac.destination);
-    osc2.start(now + 0.12);
-    osc2.stop(now + 0.36);
-  } catch {
-    /* silent */
-  }
+  softTone(660, 0.12, 0.03, "sine");
+  setTimeout(() => softTone(880, 0.1, 0.025, "sine"), 80);
 }
 
-/**
- * Micro tick — tiny sharp transient for minor UI feedback.
- */
+/** Micro tick for minor UI feedback */
 export function playTick() {
-  try {
-    const ac = getCtx();
-    const now = ac.currentTime;
-    const osc = ac.createOscillator();
-    const gain = ac.createGain();
-
-    osc.type = "square";
-    osc.frequency.setValueAtTime(3000, now);
-
-    gain.gain.setValueAtTime(0.025, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.015);
-
-    osc.connect(gain).connect(ac.destination);
-    osc.start(now);
-    osc.stop(now + 0.02);
-  } catch {
-    /* silent */
-  }
+  softTone(1200, 0.02, 0.012, "sine");
 }

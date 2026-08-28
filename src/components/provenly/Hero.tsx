@@ -2,6 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { ShieldCheck } from "lucide-react";
 import { playClick, playClickSoft, playSuccess, resumeAudio } from "@/lib/sounds";
+import { ScrollReveal, TextReveal } from "./animations";
 
 const techNodes = [
   { label: "AI", x: -220, y: -80 },
@@ -16,13 +17,12 @@ export default function Hero() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
-  // Play success chime when shield appears
   useEffect(() => {
     if (inView) {
       const timer = setTimeout(() => {
         resumeAudio();
         playSuccess();
-      }, 1400);
+      }, 1800);
       return () => clearTimeout(timer);
     }
   }, [inView]);
@@ -47,7 +47,12 @@ export default function Hero() {
 
       {/* Faint radial glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#C8442C]/[0.03] rounded-full blur-[120px]" />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 2, ease: "easeOut" }}
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#C8442C]/[0.03] rounded-full blur-[120px]"
+        />
       </div>
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 pt-28 pb-20 text-center">
@@ -64,50 +69,55 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-          className="text-[clamp(2.5rem,6vw,4.5rem)] font-light leading-[1.08] tracking-tight text-white max-w-4xl mx-auto"
-        >
-          AI-powered protection for modern{" "}
-          <span className="text-[#8ED7A3]">organizations</span>
-        </motion.h1>
+        {/* Headline with clip reveal */}
+        <h1 className="text-[clamp(2.5rem,6vw,4.5rem)] font-light leading-[1.08] tracking-tight text-white max-w-4xl mx-auto overflow-hidden">
+          <motion.span
+            className="block"
+            initial={{ y: "110%" }}
+            animate={inView ? { y: "0%" } : {}}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            AI-powered protection
+          </motion.span>
+          <motion.span
+            className="block"
+            initial={{ y: "110%" }}
+            animate={inView ? { y: "0%" } : {}}
+            transition={{ duration: 0.9, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            for modern{" "}
+            <span className="text-[#8ED7A3]">organizations</span>
+          </motion.span>
+        </h1>
 
         {/* Supporting copy */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" }}
-          className="mt-6 text-base md:text-lg text-white/50 max-w-2xl mx-auto leading-relaxed font-light"
-        >
-          Provenly detects threats, secures critical systems, and reduces risk
-          across your entire digital infrastructure with predictive AI defense.
-        </motion.p>
+        <ScrollReveal delay={0.5} distance={20}>
+          <p className="mt-6 text-base md:text-lg text-white/50 max-w-2xl mx-auto leading-relaxed font-light">
+            Provenly detects threats, secures critical systems, and reduces risk
+            across your entire digital infrastructure with predictive AI defense.
+          </p>
+        </ScrollReveal>
 
         {/* Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-          className="mt-10 flex items-center justify-center gap-4 flex-wrap"
-        >
-          <a
-            href="#contact"
-            onClick={() => { resumeAudio(); playClick(); }}
-            className="px-7 py-3 bg-[#C8442C] text-white text-sm font-medium rounded-full hover:bg-[#B83A24] transition-all duration-300 hover:shadow-lg hover:shadow-[#C8442C]/20"
-          >
-            Get started
-          </a>
-          <a
-            href="#about"
-            onClick={() => { resumeAudio(); playClickSoft(); }}
-            className="px-7 py-3 border border-white/20 text-white/80 text-sm font-medium rounded-full hover:border-white/40 hover:text-white transition-all duration-300"
-          >
-            Learn more
-          </a>
-        </motion.div>
+        <ScrollReveal delay={0.65} distance={16}>
+          <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
+            <a
+              href="#contact"
+              onClick={() => { resumeAudio(); playClick(); }}
+              className="group relative px-7 py-3 bg-[#C8442C] text-white text-sm font-medium rounded-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-[#C8442C]/20"
+            >
+              <span className="relative z-10">Get started</span>
+              <span className="absolute inset-0 bg-[#B83A24] translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            </a>
+            <a
+              href="#about"
+              onClick={() => { resumeAudio(); playClickSoft(); }}
+              className="px-7 py-3 border border-white/20 text-white/80 text-sm font-medium rounded-full hover:border-white/40 hover:text-white transition-all duration-300"
+            >
+              Learn more
+            </a>
+          </div>
+        </ScrollReveal>
 
         {/* Shield + Circuit Network */}
         <div className="relative mt-20 mx-auto" style={{ width: 560, height: 320 }}>
@@ -140,7 +150,7 @@ export default function Hero() {
                   }
                   transition={{
                     duration: 1.2,
-                    delay: 1.0 + i * 0.12,
+                    delay: 1.2 + i * 0.12,
                     ease: "easeOut",
                   }}
                 />
@@ -156,7 +166,7 @@ export default function Hero() {
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{
                 duration: 0.5,
-                delay: 1.3 + i * 0.1,
+                delay: 1.5 + i * 0.1,
                 ease: "easeOut",
               }}
               className="absolute flex flex-col items-center gap-1.5"
@@ -165,7 +175,7 @@ export default function Hero() {
                 top: 140 + node.y - 24,
               }}
             >
-              <div className="w-10 h-10 rounded-full border border-white/[0.1] bg-white/[0.03] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full border border-white/[0.1] bg-white/[0.03] flex items-center justify-center hover:border-white/[0.2] transition-colors duration-300">
                 <span className="text-[9px] font-semibold text-white/40 tracking-wider uppercase">
                   {node.label.slice(0, 2)}
                 </span>
@@ -182,14 +192,19 @@ export default function Hero() {
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{
               duration: 1,
-              delay: 0.7,
+              delay: 0.9,
               ease: [0.16, 1, 0.3, 1],
             }}
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[55%]"
           >
             <div className="relative">
               {/* Glow */}
-              <div className="absolute inset-0 -m-8 bg-[#8ED7A3]/[0.06] rounded-full blur-2xl" />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={inView ? { opacity: 1 } : {}}
+                transition={{ duration: 1.5, delay: 1.2 }}
+                className="absolute inset-0 -m-8 bg-[#8ED7A3]/[0.06] rounded-full blur-2xl"
+              />
               {/* Shield body */}
               <div className="relative w-24 h-28 flex items-center justify-center">
                 <svg

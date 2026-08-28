@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { TextReveal, StaggerChildren, staggerItem, LineReveal } from "./animations";
 
 const steps = [
   {
@@ -54,27 +55,22 @@ export default function Process() {
     <section ref={ref} className="relative bg-[#121212] py-28 md:py-36 border-t border-white/[0.04]">
       <div className="mx-auto max-w-[1320px] px-6 lg:px-10">
         {/* Section Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.15] tracking-tight text-white">
+        <div className="text-center mb-16">
+          <TextReveal
+            className="text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.15] tracking-tight text-white"
+          >
             Intelligence behind every{" "}
             <span className="text-[#8ED7A3]">decision</span>
-          </h2>
-        </motion.div>
+          </TextReveal>
+        </div>
 
-        {/* Process Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {steps.map((step, i) => (
+        {/* Process Cards with stagger */}
+        <StaggerChildren stagger={0.12} delay={0.2} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {steps.map((step) => (
             <motion.div
               key={step.num}
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + i * 0.12 }}
-              className="relative bg-[#1A1A1A] border border-white/[0.06] p-7 hover:border-white/[0.1] transition-all duration-500"
+              variants={staggerItem}
+              className="relative bg-[#1A1A1A] border border-white/[0.06] p-7 hover:border-white/[0.1] transition-all duration-500 group"
             >
               {/* Pixel corner ornament */}
               <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/[0.1]" />
@@ -86,7 +82,9 @@ export default function Process() {
               </span>
 
               {/* Icon */}
-              <div className="my-5 flex justify-center">{step.icon}</div>
+              <div className="my-5 flex justify-center opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                {step.icon}
+              </div>
 
               {/* Title */}
               <h3 className="text-base font-normal text-white tracking-tight mb-3 text-center">
@@ -102,13 +100,13 @@ export default function Process() {
               </p>
             </motion.div>
           ))}
-        </div>
+        </StaggerChildren>
 
         {/* Decorative rules */}
         <div className="mt-12 flex flex-col items-center gap-2">
-          <div className="w-24 h-px bg-white/[0.06]" />
-          <div className="w-16 h-px bg-white/[0.04]" />
-          <div className="w-12 h-px bg-white/[0.03]" />
+          <LineReveal color="rgba(255,255,255,0.06)" className="w-24" />
+          <LineReveal color="rgba(255,255,255,0.04)" delay={0.1} className="w-16" />
+          <LineReveal color="rgba(255,255,255,0.03)" delay={0.2} className="w-12" />
         </div>
       </div>
     </section>

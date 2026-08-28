@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { playHover, resumeAudio } from "@/lib/sounds";
+import { ScrollReveal, TextReveal, StaggerChildren, staggerItem, AnimatedCounter } from "./animations";
 
 export default function WhyChooseUs() {
   const ref = useRef(null);
@@ -13,26 +14,21 @@ export default function WhyChooseUs() {
     >
       <div className="mx-auto max-w-[1320px] px-6 lg:px-10">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.15] tracking-tight text-[#121212]">
+        <div className="text-center mb-16">
+          <TextReveal
+            className="text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.15] tracking-tight text-[#121212]"
+          >
             Where protection meets{" "}
             <span className="text-[#C8442C]">innovation</span>
-          </h2>
-        </motion.div>
+          </TextReveal>
+        </div>
 
-        {/* Asymmetric Collage Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[180px] lg:auto-rows-[200px]">
+        {/* Asymmetric Collage Grid with stagger */}
+        <StaggerChildren stagger={0.08} delay={0.15} className="grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[180px] lg:auto-rows-[200px]">
           {/* Large analytics chart card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="col-span-2 row-span-2 bg-white border border-black/[0.04] p-7 flex flex-col relative overflow-hidden"
+            variants={staggerItem}
+            className="col-span-2 row-span-2 bg-white border border-black/[0.04] p-7 flex flex-col relative overflow-hidden group"
           >
             {/* Pixel corner */}
             <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-black/[0.08]" />
@@ -50,19 +46,9 @@ export default function WhyChooseUs() {
             {/* Line chart */}
             <div className="flex-1 relative">
               <svg className="w-full h-full" viewBox="0 0 400 120" fill="none">
-                {/* Grid lines */}
                 {[0, 30, 60, 90].map((y) => (
-                  <line
-                    key={y}
-                    x1="0"
-                    y1={y}
-                    x2="400"
-                    y2={y}
-                    stroke="rgba(0,0,0,0.04)"
-                    strokeWidth="0.5"
-                  />
+                  <line key={y} x1="0" y1={y} x2="400" y2={y} stroke="rgba(0,0,0,0.04)" strokeWidth="0.5" />
                 ))}
-                {/* Chart line */}
                 <motion.path
                   d="M0,100 C40,90 80,85 120,70 C160,55 200,60 240,40 C280,20 320,25 360,15 L400,10"
                   stroke="#C8442C"
@@ -72,13 +58,7 @@ export default function WhyChooseUs() {
                   animate={inView ? { pathLength: 1 } : {}}
                   transition={{ duration: 2, delay: 0.6, ease: "easeOut" }}
                 />
-                {/* Data points */}
-                {[
-                  [0, 100],
-                  [120, 70],
-                  [240, 40],
-                  [360, 15],
-                ].map(([x, y], i) => (
+                {[[0, 100], [120, 70], [240, 40], [360, 15]].map(([x, y], i) => (
                   <motion.circle
                     key={i}
                     cx={x}
@@ -94,17 +74,15 @@ export default function WhyChooseUs() {
             </div>
           </motion.div>
 
-          {/* Rust-red stat card: 99.9% */}
+          {/* Rust-red stat card: 99.9% with counter */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            variants={staggerItem}
             onMouseEnter={() => { resumeAudio(); playHover(); }}
-            className="bg-[#C8442C] text-white p-7 flex flex-col justify-end relative overflow-hidden"
+            className="bg-[#C8442C] text-white p-7 flex flex-col justify-end relative overflow-hidden group cursor-default"
           >
             <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-white/20" />
             <p className="text-4xl lg:text-5xl font-light tracking-tight">
-              99.9%
+              <AnimatedCounter to={99.9} decimals={1} suffix="%" duration={1.5} />
             </p>
             <p className="text-[12px] text-white/60 mt-2 font-medium">
               Platform uptime guarantee
@@ -113,9 +91,7 @@ export default function WhyChooseUs() {
 
           {/* Protection card with isometric diamond */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.35 }}
+            variants={staggerItem}
             className="bg-white border border-black/[0.04] p-5 flex items-center justify-center relative overflow-hidden"
           >
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
@@ -125,17 +101,15 @@ export default function WhyChooseUs() {
             </svg>
           </motion.div>
 
-          {/* 500M+ stat card */}
+          {/* 500M+ stat card with counter */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            variants={staggerItem}
             onMouseEnter={() => { resumeAudio(); playHover(); }}
-            className="bg-white border border-black/[0.04] p-7 flex flex-col justify-end relative"
+            className="bg-white border border-black/[0.04] p-7 flex flex-col justify-end relative cursor-default"
           >
             <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-black/[0.08]" />
             <p className="text-3xl lg:text-4xl font-light tracking-tight text-[#121212]">
-              500M+
+              <AnimatedCounter to={500} suffix="M+" duration={2} />
             </p>
             <p className="text-[12px] text-black/40 mt-2 font-medium">
               Threats blocked annually
@@ -144,9 +118,7 @@ export default function WhyChooseUs() {
 
           {/* Portrait image tile */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            variants={staggerItem}
             className="bg-[#1A1A1A] relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2a] to-[#121212]" />
@@ -159,9 +131,7 @@ export default function WhyChooseUs() {
 
           {/* Wide testimonial card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.45 }}
+            variants={staggerItem}
             className="col-span-2 bg-white border border-black/[0.04] p-7 flex flex-col justify-between relative"
           >
             <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-black/[0.08]" />
@@ -178,21 +148,15 @@ export default function WhyChooseUs() {
             </blockquote>
             <div className="mt-4 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[#121212]/[0.07] flex items-center justify-center">
-                <span className="text-[10px] font-semibold text-[#121212]/50">
-                  SJ
-                </span>
+                <span className="text-[10px] font-semibold text-[#121212]/50">SJ</span>
               </div>
               <div>
-                <p className="text-[12px] font-medium text-[#121212]">
-                  Sarah Jenkins
-                </p>
-                <p className="text-[10px] text-black/35">
-                  CISO, NexaBank
-                </p>
+                <p className="text-[12px] font-medium text-[#121212]">Sarah Jenkins</p>
+                <p className="text-[10px] text-black/35">CISO, NexaBank</p>
               </div>
             </div>
           </motion.div>
-        </div>
+        </StaggerChildren>
       </div>
     </section>
   );
