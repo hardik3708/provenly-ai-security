@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Shield } from "lucide-react";
+import { playHover, playClick, resumeAudio } from "@/lib/sounds";
 
 const services = [
   {
@@ -110,6 +111,7 @@ export default function Services() {
                   delay: 0.15 + i * 0.1,
                   ease: "easeOut",
                 }}
+                onMouseEnter={() => { resumeAudio(); playHover(); }}
                 className="group relative bg-white/[0.04] border border-white/[0.06] p-6 hover:bg-white/[0.06] transition-all duration-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20"
               >
                 {/* Pixel corner ornament */}
@@ -158,6 +160,7 @@ export default function Services() {
               </p>
               <a
                 href="#contact"
+                onClick={() => { resumeAudio(); playClick(); }}
                 className="inline-flex items-center px-6 py-2.5 bg-[#C8442C] text-white text-[13px] font-medium rounded-full hover:bg-[#B83A24] transition-all duration-300"
               >
                 More services

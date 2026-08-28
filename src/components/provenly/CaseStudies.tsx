@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Shield, ArrowRight } from "lucide-react";
+import { playClick, playHover, resumeAudio } from "@/lib/sounds";
 
 const cases = [
   {
@@ -58,6 +59,7 @@ export default function CaseStudies() {
           </div>
           <a
             href="#"
+            onClick={() => { resumeAudio(); playClick(); }}
             className="mt-4 sm:mt-0 inline-flex items-center px-5 py-2 bg-[#C8442C] text-white text-[13px] font-medium rounded-full hover:bg-[#B83A24] transition-all duration-300 self-start sm:self-auto"
           >
             View all
@@ -98,6 +100,7 @@ export default function CaseStudies() {
 
                 <a
                   href="#"
+                  onClick={() => { resumeAudio(); playClick(); }}
                   className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#C8442C] group-hover:gap-2.5 transition-all duration-300"
                 >
                   View details
@@ -106,7 +109,7 @@ export default function CaseStudies() {
               </div>
 
               {/* Right: Image placeholder */}
-              <div className="lg:col-span-5 relative overflow-hidden min-h-[220px]">
+              <div className="lg:col-span-5 relative overflow-hidden min-h-[220px]" onMouseEnter={() => { resumeAudio(); playHover(); }}>
                 <div
                   className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
                   style={{ background: cs.image }}

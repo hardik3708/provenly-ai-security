@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import { playClick, playHover, resumeAudio } from "@/lib/sounds";
 
 const articles = [
   {
@@ -46,6 +47,7 @@ export default function Blog() {
           </div>
           <a
             href="#"
+            onClick={() => { resumeAudio(); playClick(); }}
             className="mt-4 sm:mt-0 inline-flex items-center px-5 py-2 bg-[#C8442C] text-white text-[13px] font-medium rounded-full hover:bg-[#B83A24] transition-all duration-300 self-start sm:self-auto"
           >
             View all
@@ -74,6 +76,8 @@ export default function Blog() {
                 </div>
                 <a
                   href="#"
+                  onClick={() => { resumeAudio(); playClick(); }}
+                  onMouseEnter={() => { resumeAudio(); playHover(); }}
                   className="inline-flex items-start gap-2 group/link"
                 >
                   <h3 className="text-lg md:text-xl font-light text-[#121212] leading-snug group-hover/link:text-[#C8442C] transition-colors duration-300">

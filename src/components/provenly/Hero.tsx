@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { ShieldCheck } from "lucide-react";
+import { playClick, playClickSoft, playSuccess, resumeAudio } from "@/lib/sounds";
 
 const techNodes = [
   { label: "AI", x: -220, y: -80 },
@@ -14,6 +15,17 @@ const techNodes = [
 export default function Hero() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  // Play success chime when shield appears
+  useEffect(() => {
+    if (inView) {
+      const timer = setTimeout(() => {
+        resumeAudio();
+        playSuccess();
+      }, 1400);
+      return () => clearTimeout(timer);
+    }
+  }, [inView]);
 
   return (
     <section
@@ -83,12 +95,14 @@ export default function Hero() {
         >
           <a
             href="#contact"
+            onClick={() => { resumeAudio(); playClick(); }}
             className="px-7 py-3 bg-[#C8442C] text-white text-sm font-medium rounded-full hover:bg-[#B83A24] transition-all duration-300 hover:shadow-lg hover:shadow-[#C8442C]/20"
           >
             Get started
           </a>
           <a
             href="#about"
+            onClick={() => { resumeAudio(); playClickSoft(); }}
             className="px-7 py-3 border border-white/20 text-white/80 text-sm font-medium rounded-full hover:border-white/40 hover:text-white transition-all duration-300"
           >
             Learn more

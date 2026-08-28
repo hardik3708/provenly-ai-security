@@ -1,6 +1,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { Shield, Star } from "lucide-react";
+import { playSwitch, playHover, resumeAudio } from "@/lib/sounds";
 
 const testimonials = [
   {
@@ -83,7 +84,8 @@ export default function Testimonials() {
           {testimonials.map((t, i) => (
             <button
               key={i}
-              onClick={() => setActive(i)}
+              onClick={() => { resumeAudio(); playSwitch(); setActive(i); }}
+              onMouseEnter={() => { resumeAudio(); playHover(); }}
               className={`flex items-center gap-3 px-5 py-3 rounded-md transition-all duration-400 border ${
                 active === i
                   ? "bg-white/[0.06] border-white/[0.1]"

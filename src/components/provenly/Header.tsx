@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Menu, X, ChevronDown } from "lucide-react";
+import { playNav, playClick, playSwitch, resumeAudio } from "@/lib/sounds";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -35,7 +36,7 @@ export default function Header() {
         <div className="mx-auto max-w-[1320px] px-6 lg:px-10">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <a href="#home" className="flex items-center gap-2.5 group">
+            <a href="#home" className="flex items-center gap-2.5 group" onClick={() => { resumeAudio(); playNav(); }}>
               <div className="relative flex items-center justify-center w-8 h-8">
                 <Shield className="w-7 h-7 text-[#C8442C] stroke-[1.8]" />
               </div>
@@ -57,7 +58,7 @@ export default function Header() {
               ))}
               <div className="relative">
                 <button
-                  onClick={() => setPagesOpen(!pagesOpen)}
+                  onClick={() => { resumeAudio(); playSwitch(); setPagesOpen(!pagesOpen); }}
                   className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-white/60 hover:text-white transition-colors duration-300 tracking-wide"
                 >
                   All Pages
@@ -94,12 +95,13 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <a
                 href="#contact"
+                onClick={() => { resumeAudio(); playClick(); }}
                 className="hidden md:inline-flex items-center px-5 py-2 text-[13px] font-medium bg-white text-[#121212] rounded-full hover:bg-white/90 transition-all duration-300 hover:shadow-lg hover:shadow-white/10"
               >
                 Contact us
               </a>
               <button
-                onClick={() => setMobileOpen(!mobileOpen)}
+                onClick={() => { resumeAudio(); playSwitch(); setMobileOpen(!mobileOpen); }}
                 className="md:hidden text-white/70 hover:text-white p-1"
                 aria-label="Toggle menu"
               >
@@ -135,7 +137,7 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.05 }}
                   className="text-2xl font-light text-white/80 hover:text-white transition-colors"
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => { resumeAudio(); playNav(); setMobileOpen(false); }}
                 >
                   {link.label}
                 </motion.a>
@@ -146,7 +148,7 @@ export default function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35 }}
                 className="mt-4 px-8 py-3 bg-[#C8442C] text-white text-sm font-medium rounded-full"
-                onClick={() => setMobileOpen(false)}
+                onClick={() => { resumeAudio(); playClick(); setMobileOpen(false); }}
               >
                 Contact us
               </motion.a>

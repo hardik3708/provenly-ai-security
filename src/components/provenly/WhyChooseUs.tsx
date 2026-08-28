@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { playHover, resumeAudio } from "@/lib/sounds";
 
 export default function WhyChooseUs() {
   const ref = useRef(null);
@@ -98,6 +99,7 @@ export default function WhyChooseUs() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.25 }}
+            onMouseEnter={() => { resumeAudio(); playHover(); }}
             className="bg-[#C8442C] text-white p-7 flex flex-col justify-end relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-white/20" />
@@ -128,6 +130,7 @@ export default function WhyChooseUs() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.3 }}
+            onMouseEnter={() => { resumeAudio(); playHover(); }}
             className="bg-white border border-black/[0.04] p-7 flex flex-col justify-end relative"
           >
             <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-black/[0.08]" />

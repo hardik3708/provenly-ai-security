@@ -1,4 +1,5 @@
 import { Shield, Twitter, Linkedin, Github, ArrowRight } from "lucide-react";
+import { playClick, playNav, playHover, playTick, resumeAudio } from "@/lib/sounds";
 
 const footerLinks = {
   Platform: ["Threat Detection", "Predictive AI", "Cloud Security", "Compliance"],
@@ -41,7 +42,10 @@ export default function Footer() {
                   className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-full text-[13px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/15 transition-colors"
                 />
               </div>
-              <button className="w-10 h-10 rounded-full bg-[#C8442C] flex items-center justify-center hover:bg-[#B83A24] transition-colors">
+              <button
+                onClick={() => { resumeAudio(); playClick(); }}
+                className="w-10 h-10 rounded-full bg-[#C8442C] flex items-center justify-center hover:bg-[#B83A24] transition-colors"
+              >
                 <ArrowRight className="w-4 h-4 text-white" />
               </button>
             </div>
@@ -59,6 +63,8 @@ export default function Footer() {
                     <li key={link}>
                       <a
                         href="#"
+                        onClick={() => { resumeAudio(); playNav(); }}
+                        onMouseEnter={() => { resumeAudio(); playHover(); }}
                         className="text-[13px] text-white/30 hover:text-white/60 transition-colors duration-300 font-light"
                       >
                         {link}
@@ -81,6 +87,8 @@ export default function Footer() {
               <a
                 key={i}
                 href="#"
+                onClick={() => { resumeAudio(); playTick(); }}
+                onMouseEnter={() => { resumeAudio(); playHover(); }}
                 className="w-8 h-8 rounded-full border border-white/[0.06] flex items-center justify-center text-white/25 hover:text-white/50 hover:border-white/[0.12] transition-all duration-300"
               >
                 <Icon className="w-3.5 h-3.5" />

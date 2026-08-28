@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { playClick, playClickSoft, resumeAudio } from "@/lib/sounds";
 
 export default function CTA() {
   const ref = useRef(null);
@@ -145,12 +146,14 @@ export default function CTA() {
         >
           <a
             href="#"
+            onClick={() => { resumeAudio(); playClick(); }}
             className="px-7 py-3 bg-white text-[#C8442C] text-sm font-medium rounded-full hover:bg-white/90 transition-all duration-300"
           >
             View pricing
           </a>
           <a
             href="#contact"
+            onClick={() => { resumeAudio(); playClickSoft(); }}
             className="px-7 py-3 bg-[#121212] text-white text-sm font-medium rounded-full hover:bg-[#1A1A1A] transition-all duration-300"
           >
             Contact us
