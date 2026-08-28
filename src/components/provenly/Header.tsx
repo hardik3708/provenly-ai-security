@@ -51,6 +51,7 @@ export default function Header() {
                 <a
                   key={link.label}
                   href={link.href}
+                  onClick={() => { resumeAudio(); playNav(); }}
                   className="px-4 py-2 text-[13px] font-medium text-white/60 hover:text-white transition-colors duration-300 tracking-wide"
                 >
                   {link.label}

@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Shield, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { playClick, playHover, resumeAudio } from "@/lib/sounds";
 
 const cases = [

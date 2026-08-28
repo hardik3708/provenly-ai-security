@@ -22,7 +22,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pb-16">
           {/* Left: Brand + Newsletter */}
           <div className="lg:col-span-5">
-            <a href="#home" className="inline-flex items-center gap-2 mb-5">
+            <a href="#home" onClick={() => { resumeAudio(); playNav(); }} className="inline-flex items-center gap-2 mb-5">
               <Shield className="w-6 h-6 text-[#C8442C] stroke-[1.8]" />
               <span className="text-white text-lg font-semibold tracking-tight">
                 Provenly

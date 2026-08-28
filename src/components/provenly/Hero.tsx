@@ -122,7 +122,6 @@ export default function Hero() {
               const cy = 140;
               const nx = 280 + node.x;
               const ny = 140 + node.y;
-              const mx = (cx + nx) / 2;
               return (
                 <motion.line
                   key={i}

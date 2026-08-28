@@ -86,7 +86,7 @@ export default function Testimonials() {
               key={i}
               onClick={() => { resumeAudio(); playSwitch(); setActive(i); }}
               onMouseEnter={() => { resumeAudio(); playHover(); }}
-              className={`flex items-center gap-3 px-5 py-3 rounded-md transition-all duration-400 border ${
+              className={`flex items-center gap-3 px-5 py-3 rounded-md transition-all duration-300 border ${
                 active === i
                   ? "bg-white/[0.06] border-white/[0.1]"
                   : "bg-transparent border-white/[0.04] hover:border-white/[0.08]"
