@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { TextReveal, StaggerChildren, staggerItem, LineReveal } from "./animations";
+import { RadarScan } from "./Illustrations";
 
 const steps = [
   {
@@ -53,6 +54,10 @@ export default function Process() {
 
   return (
     <section ref={ref} className="relative bg-[#121212] py-28 md:py-36 border-t border-white/[0.04]">
+      {/* Decorative radar in background */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+        <RadarScan className="w-[600px] h-[600px]" />
+      </div>
       <div className="mx-auto max-w-[1320px] px-6 lg:px-10">
         {/* Section Title */}
         <div className="text-center mb-16">

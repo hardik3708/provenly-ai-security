@@ -1,34 +1,35 @@
 /**
- * Provenly sound effects — minimal, professional, warm.
- * Inspired by Apple, Linear, and Vercel interactions.
- * All sounds are synthesized at runtime — no external audio files.
+ * Provenly sound effects — polished, premium, tactile.
+ * Inspired by Linear, Stripe, and Apple's interaction audio.
+ * All sounds are synthesized at runtime — zero external files.
  */
 
 let ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext {
-  if (!ctx) {
-    ctx = new AudioContext();
-  }
+  if (!ctx) ctx = new AudioContext();
   return ctx;
 }
 
 export function resumeAudio() {
-  try {
-    getCtx().resume();
-  } catch {
-    /* silent */
-  }
+  try { getCtx().resume(); } catch { /* silent */ }
 }
 
 /* ------------------------------------------------------------------ */
-/*  Internal helpers                                                   */
+/*  Core synth helper                                                  */
 /* ------------------------------------------------------------------ */
 
-function softTone(freq: number, duration: number, vol: number, type: OscillatorType = "sine") {
+function synth(
+  freq: number,
+  vol: number,
+  duration: number,
+  type: OscillatorType = "sine",
+  attackMs = 6,
+  delayMs = 0,
+) {
   try {
     const ac = getCtx();
-    const now = ac.currentTime;
+    const now = ac.currentTime + delayMs / 1000;
     const osc = ac.createOscillator();
     const gain = ac.createGain();
 
@@ -36,59 +37,86 @@ function softTone(freq: number, duration: number, vol: number, type: OscillatorT
     osc.frequency.setValueAtTime(freq, now);
 
     gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(vol, now + 0.008);
+    gain.gain.linearRampToValueAtTime(vol, now + attackMs / 1000);
     gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
     osc.connect(gain).connect(ac.destination);
     osc.start(now);
-    osc.stop(now + duration + 0.01);
-  } catch {
-    /* silent */
-  }
-}
-
-function warmClick() {
-  softTone(520, 0.06, 0.04, "sine");
-  setTimeout(() => softTone(440, 0.04, 0.02, "sine"), 8);
+    osc.stop(now + duration + 0.02);
+  } catch { /* silent */ }
 }
 
 /* ------------------------------------------------------------------ */
-/*  Public API                                                         */
+/*  Public API — each function is one distinct interaction             */
 /* ------------------------------------------------------------------ */
 
-/** Primary CTA button — warm, barely-there tap */
+/**
+ * Primary CTA click — warm, rounded tap with soft attack.
+ * Think: Linear's primary button press.
+ */
 export function playClick() {
-  warmClick();
+  synth(440, 0.045, 0.07, "sine", 4);
+  synth(330, 0.025, 0.05, "sine", 6, 3);
 }
 
-/** Secondary / ghost button — slightly softer */
+/**
+ * Secondary button — lighter, higher, shorter.
+ */
 export function playClickSoft() {
-  softTone(380, 0.05, 0.025, "sine");
+  synth(560, 0.025, 0.04, "sine", 3);
 }
 
-/** Card hover — micro-tick, nearly subliminal */
+/**
+ * Card hover — barely-there micro blip.
+ * Should feel like a whisper, not a sound.
+ */
 export function playHover() {
-  softTone(1800, 0.025, 0.015, "sine");
+  synth(2400, 0.012, 0.018, "sine", 2);
 }
 
-/** Tab switch / toggle — two soft micro-tones */
+/**
+ * Tab switch / toggle — two soft micro-tones,
+ * like a refined toggle flip.
+ */
 export function playSwitch() {
-  softTone(600, 0.04, 0.025, "sine");
-  setTimeout(() => softTone(750, 0.035, 0.02, "sine"), 20);
+  synth(520, 0.025, 0.04, "sine", 3);
+  synth(680, 0.018, 0.035, "sine", 3, 22);
 }
 
-/** Navigation link — muted, warm */
+/**
+ * Navigation click — muted, warm, like a soft keyboard tap.
+ */
 export function playNav() {
-  softTone(420, 0.045, 0.02, "triangle");
+  synth(360, 0.02, 0.04, "triangle", 5);
 }
 
-/** Success / verification — gentle ascending two-note chime */
+/**
+ * Success / verification — gentle ascending chime.
+ * Feels like a door unlocking quietly.
+ */
 export function playSuccess() {
-  softTone(660, 0.12, 0.03, "sine");
-  setTimeout(() => softTone(880, 0.1, 0.025, "sine"), 80);
+  synth(660, 0.03, 0.14, "sine", 8);
+  synth(880, 0.022, 0.12, "sine", 8, 90);
+  synth(1100, 0.012, 0.08, "sine", 6, 170);
 }
 
-/** Micro tick for minor UI feedback */
+/**
+ * Micro tick — tiny, sharp, for minor feedback.
+ */
 export function playTick() {
-  softTone(1200, 0.02, 0.012, "sine");
+  synth(1400, 0.015, 0.015, "sine", 2);
+}
+
+/**
+ * Scroll reveal — soft whoosh-feel, used when a section enters view.
+ */
+export function playReveal() {
+  synth(200, 0.008, 0.15, "sine", 10);
+}
+
+/**
+ * Counter tick — tiny blip for each number increment.
+ */
+export function playCounterTick() {
+  synth(1800, 0.006, 0.008, "sine", 1);
 }

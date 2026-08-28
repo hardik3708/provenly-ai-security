@@ -1,8 +1,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect } from "react";
-import { ShieldCheck } from "lucide-react";
 import { playClick, playClickSoft, playSuccess, resumeAudio } from "@/lib/sounds";
-import { ScrollReveal, TextReveal } from "./animations";
+import { ScrollReveal } from "./animations";
+import { ShieldIllustration } from "./Illustrations";
 
 const techNodes = [
   { label: "AI", x: -220, y: -80 },
@@ -13,6 +13,15 @@ const techNodes = [
   { label: "API", x: 160, y: 140 },
 ];
 
+const nodeIcons: Record<string, string> = {
+  AI: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
+  Cloud: "M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z",
+  Ze: "M4 4h16v16H4z",
+  ML: "M12 2v20M2 12h20",
+  SO: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+  AP: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z",
+};
+
 export default function Hero() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -22,7 +31,7 @@ export default function Hero() {
       const timer = setTimeout(() => {
         resumeAudio();
         playSuccess();
-      }, 1800);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [inView]);
@@ -45,18 +54,16 @@ export default function Hero() {
         </svg>
       </div>
 
-      {/* Faint radial glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 2, ease: "easeOut" }}
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#C8442C]/[0.03] rounded-full blur-[120px]"
-        />
-      </div>
+      {/* Radial glow */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 2, ease: "easeOut" }}
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#C8442C]/[0.03] rounded-full blur-[120px] pointer-events-none"
+      />
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 pt-28 pb-20 text-center">
-        {/* Eyebrow label */}
+        {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -69,13 +76,13 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Headline with clip reveal */}
+        {/* Headline — line-by-line clip reveal */}
         <h1 className="text-[clamp(2.5rem,6vw,4.5rem)] font-light leading-[1.08] tracking-tight text-white max-w-4xl mx-auto overflow-hidden">
           <motion.span
             className="block"
             initial={{ y: "110%" }}
             animate={inView ? { y: "0%" } : {}}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
           >
             AI-powered protection
           </motion.span>
@@ -83,7 +90,7 @@ export default function Hero() {
             className="block"
             initial={{ y: "110%" }}
             animate={inView ? { y: "0%" } : {}}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.9, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
           >
             for modern{" "}
             <span className="text-[#8ED7A3]">organizations</span>
@@ -98,7 +105,7 @@ export default function Hero() {
           </p>
         </ScrollReveal>
 
-        {/* Buttons */}
+        {/* Buttons with slide-up fill */}
         <ScrollReveal delay={0.65} distance={16}>
           <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
             <a
@@ -107,7 +114,7 @@ export default function Hero() {
               className="group relative px-7 py-3 bg-[#C8442C] text-white text-sm font-medium rounded-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-[#C8442C]/20"
             >
               <span className="relative z-10">Get started</span>
-              <span className="absolute inset-0 bg-[#B83A24] translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              <span className="absolute inset-0 bg-[#B83A24] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
             </a>
             <a
               href="#about"
@@ -120,125 +127,61 @@ export default function Hero() {
         </ScrollReveal>
 
         {/* Shield + Circuit Network */}
-        <div className="relative mt-20 mx-auto" style={{ width: 560, height: 320 }}>
+        <div className="relative mt-16 mx-auto" style={{ width: 600, height: 360 }}>
           {/* Circuit lines */}
-          <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox="0 0 560 320"
-            fill="none"
-          >
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 600 360" fill="none">
             {techNodes.map((node, i) => {
-              const cx = 280;
-              const cy = 140;
-              const nx = 280 + node.x;
-              const ny = 140 + node.y;
+              const cx = 300;
+              const cy = 160;
+              const nx = 300 + node.x;
+              const ny = 160 + node.y;
               return (
                 <motion.line
                   key={i}
-                  x1={cx}
-                  y1={cy}
-                  x2={nx}
-                  y2={ny}
-                  stroke="rgba(255,255,255,0.07)"
+                  x1={cx} y1={cy} x2={nx} y2={ny}
+                  stroke="rgba(255,255,255,0.06)"
                   strokeWidth="0.75"
                   strokeDasharray="4 4"
                   initial={{ pathLength: 0, opacity: 0 }}
-                  animate={
-                    inView
-                      ? { pathLength: 1, opacity: 1 }
-                      : { pathLength: 0, opacity: 0 }
-                  }
-                  transition={{
-                    duration: 1.2,
-                    delay: 1.2 + i * 0.12,
-                    ease: "easeOut",
-                  }}
+                  animate={inView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+                  transition={{ duration: 1.4, delay: 1.4 + i * 0.12, ease: "easeOut" }}
                 />
               );
             })}
           </svg>
 
-          {/* Tech nodes */}
+          {/* Tech nodes with icons */}
           {techNodes.map((node, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
-              transition={{
-                duration: 0.5,
-                delay: 1.5 + i * 0.1,
-                ease: "easeOut",
-              }}
+              transition={{ duration: 0.5, delay: 1.7 + i * 0.1, ease: "easeOut" }}
               className="absolute flex flex-col items-center gap-1.5"
-              style={{
-                left: 280 + node.x - 24,
-                top: 140 + node.y - 24,
-              }}
+              style={{ left: 300 + node.x - 24, top: 160 + node.y - 24 }}
             >
-              <div className="w-10 h-10 rounded-full border border-white/[0.1] bg-white/[0.03] flex items-center justify-center hover:border-white/[0.2] transition-colors duration-300">
-                <span className="text-[9px] font-semibold text-white/40 tracking-wider uppercase">
-                  {node.label.slice(0, 2)}
-                </span>
+              <div className="w-10 h-10 rounded-full border border-white/[0.08] bg-white/[0.03] flex items-center justify-center hover:border-[#C8442C]/30 hover:bg-[#C8442C]/[0.05] transition-all duration-300 cursor-default">
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d={nodeIcons[node.label.slice(0, 2)] || nodeIcons.AI} />
+                </svg>
               </div>
-              <span className="text-[10px] text-white/30 font-medium">
-                {node.label}
-              </span>
+              <span className="text-[10px] text-white/25 font-medium">{node.label}</span>
             </motion.div>
           ))}
 
           {/* Central Shield */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{
-              duration: 1,
-              delay: 0.9,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[55%]"
+            transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[52%]"
           >
-            <div className="relative">
-              {/* Glow */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={inView ? { opacity: 1 } : {}}
-                transition={{ duration: 1.5, delay: 1.2 }}
-                className="absolute inset-0 -m-8 bg-[#8ED7A3]/[0.06] rounded-full blur-2xl"
-              />
-              {/* Shield body */}
-              <div className="relative w-24 h-28 flex items-center justify-center">
-                <svg
-                  viewBox="0 0 80 96"
-                  className="w-full h-full"
-                  fill="none"
-                >
-                  <defs>
-                    <linearGradient id="shieldGrad" x1="40" y1="0" x2="40" y2="96" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#3A3A3A" />
-                      <stop offset="50%" stopColor="#1E1E1E" />
-                      <stop offset="100%" stopColor="#2A2A2A" />
-                    </linearGradient>
-                    <linearGradient id="shieldSheen" x1="20" y1="0" x2="60" y2="80" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="rgba(255,255,255,0.12)" />
-                      <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M40 4 L72 16 L72 44 C72 64 56 82 40 92 C24 82 8 64 8 44 L8 16 Z"
-                    fill="url(#shieldGrad)"
-                    stroke="rgba(255,255,255,0.15)"
-                    strokeWidth="0.75"
-                  />
-                  <path
-                    d="M40 4 L72 16 L72 44 C72 64 56 82 40 92 C24 82 8 64 8 44 L8 16 Z"
-                    fill="url(#shieldSheen)"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <ShieldCheck className="w-8 h-8 text-[#8ED7A3] stroke-[1.5]" />
-                </div>
-              </div>
-            </div>
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ShieldIllustration className="w-40 h-44" />
+            </motion.div>
           </motion.div>
         </div>
       </div>

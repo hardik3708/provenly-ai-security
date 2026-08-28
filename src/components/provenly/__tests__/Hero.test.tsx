@@ -76,6 +76,23 @@ vi.mock("@/components/provenly/animations", () => {
   };
 });
 
+// Mock Illustrations — render placeholder SVG
+vi.mock("@/components/provenly/Illustrations", () => {
+  const React = require("react");
+  return {
+    ShieldIllustration: ({ className }: { className?: string }) =>
+      React.createElement("div", { className, "data-testid": "shield-illustration" }),
+    NetworkTopology: ({ className }: { className?: string }) =>
+      React.createElement("div", { className }),
+    RadarScan: ({ className }: { className?: string }) =>
+      React.createElement("div", { className }),
+    LockCircuit: ({ className }: { className?: string }) =>
+      React.createElement("div", { className }),
+    EyeScan: ({ className }: { className?: string }) =>
+      React.createElement("div", { className }),
+  };
+});
+
 describe("Hero", () => {
   it("renders the eyebrow label", () => {
     render(<Hero />);
@@ -101,12 +118,12 @@ describe("Hero", () => {
     expect(screen.getByText("Learn more")).toBeInTheDocument();
   });
 
-  it("renders all six tech nodes", () => {
+  it("renders all six tech node labels", () => {
     render(<Hero />);
-    expect(screen.getAllByText("AI").length).toBe(2);
+    expect(screen.getByText("AI")).toBeInTheDocument();
     expect(screen.getByText("Cloud")).toBeInTheDocument();
     expect(screen.getByText("Zero Trust")).toBeInTheDocument();
-    expect(screen.getAllByText("ML").length).toBe(2);
+    expect(screen.getByText("ML")).toBeInTheDocument();
     expect(screen.getByText("SOC")).toBeInTheDocument();
     expect(screen.getByText("API")).toBeInTheDocument();
   });

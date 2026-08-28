@@ -31,10 +31,7 @@ beforeEach(() => {
     resume: vi.fn().mockResolvedValue(undefined),
   };
   Object.defineProperty(globalThis, "AudioContext", {
-    value: Object.assign(
-      function () { return lastCtx; },
-      { prototype: {} }
-    ),
+    value: Object.assign(function () { return lastCtx; }, { prototype: {} }),
     writable: true,
     configurable: true,
   });
@@ -67,83 +64,80 @@ describe("sounds.ts", () => {
   });
 
   describe("playClick", () => {
-    it("creates oscillator with soft sine tone", async () => {
+    it("creates warm sine click at 440 Hz", async () => {
       const { playClick } = await loadSounds();
       playClick();
       expect(lastCtx.createOscillator).toHaveBeenCalled();
-      expect(lastCtx.createGain).toHaveBeenCalled();
       const osc = (lastCtx.createOscillator as ReturnType<typeof vi.fn>).mock.results[0].value;
       expect(osc.type).toBe("sine");
-      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(520, expect.any(Number));
+      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(440, expect.any(Number));
       expect(osc.start).toHaveBeenCalled();
       expect(osc.stop).toHaveBeenCalled();
     });
   });
 
   describe("playClickSoft", () => {
-    it("creates softer tone at lower frequency", async () => {
+    it("creates lighter tone at 560 Hz", async () => {
       const { playClickSoft } = await loadSounds();
       playClickSoft();
       const osc = (lastCtx.createOscillator as ReturnType<typeof vi.fn>).mock.results[0].value;
-      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(380, expect.any(Number));
+      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(560, expect.any(Number));
     });
   });
 
   describe("playHover", () => {
-    it("creates micro-tick at 1800 Hz", async () => {
+    it("creates micro-blip at 2400 Hz", async () => {
       const { playHover } = await loadSounds();
       playHover();
       const osc = (lastCtx.createOscillator as ReturnType<typeof vi.fn>).mock.results[0].value;
-      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(1800, expect.any(Number));
+      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(2400, expect.any(Number));
     });
   });
 
   describe("playSwitch", () => {
-    it("creates soft dual tone", async () => {
+    it("fires two tones synchronously", async () => {
       const { playSwitch } = await loadSounds();
       playSwitch();
-      // First tone fires synchronously
-      expect(lastCtx.createOscillator).toHaveBeenCalledTimes(1);
-      // Second tone fires after 20ms setTimeout
-      vi.advanceTimersByTime(25);
-      expect(lastCtx.createOscillator).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  describe("playNav", () => {
-    it("uses triangle waveform", async () => {
-      const { playNav } = await loadSounds();
-      playNav();
-      const osc = (lastCtx.createOscillator as ReturnType<typeof vi.fn>).mock.results[0].value;
-      expect(osc.type).toBe("triangle");
-      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(420, expect.any(Number));
-    });
-  });
-
-  describe("playSuccess", () => {
-    it("creates ascending two-note chime via setTimeout", async () => {
-      const { playSuccess } = await loadSounds();
-      playSuccess();
-      // First note fires synchronously
-      expect(lastCtx.createOscillator).toHaveBeenCalledTimes(1);
-      // Second note fires after 80ms
-      vi.advanceTimersByTime(85);
+      // Both tones fire synchronously via synth() with delayMs param
       expect(lastCtx.createOscillator).toHaveBeenCalledTimes(2);
       const createOsc = lastCtx.createOscillator as ReturnType<typeof vi.fn>;
       const osc1 = createOsc.mock.results[0].value;
       const osc2 = createOsc.mock.results[1].value;
-      expect(osc1.frequency.setValueAtTime).toHaveBeenCalledWith(660, expect.any(Number));
-      expect(osc2.frequency.setValueAtTime).toHaveBeenCalledWith(880, expect.any(Number));
+      expect(osc1.frequency.setValueAtTime).toHaveBeenCalledWith(520, expect.any(Number));
+      expect(osc2.frequency.setValueAtTime).toHaveBeenCalledWith(680, expect.any(Number));
+    });
+  });
+
+  describe("playNav", () => {
+    it("uses triangle waveform at 360 Hz", async () => {
+      const { playNav } = await loadSounds();
+      playNav();
+      const osc = (lastCtx.createOscillator as ReturnType<typeof vi.fn>).mock.results[0].value;
+      expect(osc.type).toBe("triangle");
+      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(360, expect.any(Number));
+    });
+  });
+
+  describe("playSuccess", () => {
+    it("fires three ascending notes synchronously", async () => {
+      const { playSuccess } = await loadSounds();
+      playSuccess();
+      // All three notes fire synchronously via synth() with delayMs
+      expect(lastCtx.createOscillator).toHaveBeenCalledTimes(3);
+      const createOsc = lastCtx.createOscillator as ReturnType<typeof vi.fn>;
+      expect(createOsc.mock.results[0].value.frequency.setValueAtTime).toHaveBeenCalledWith(660, expect.any(Number));
+      expect(createOsc.mock.results[1].value.frequency.setValueAtTime).toHaveBeenCalledWith(880, expect.any(Number));
+      expect(createOsc.mock.results[2].value.frequency.setValueAtTime).toHaveBeenCalledWith(1100, expect.any(Number));
     });
   });
 
   describe("playTick", () => {
-    it("creates soft sine tick", async () => {
+    it("creates sine tick at 1400 Hz", async () => {
       const { playTick } = await loadSounds();
       playTick();
       const osc = (lastCtx.createOscillator as ReturnType<typeof vi.fn>).mock.results[0].value;
       expect(osc.type).toBe("sine");
-      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(1200, expect.any(Number));
+      expect(osc.frequency.setValueAtTime).toHaveBeenCalledWith(1400, expect.any(Number));
     });
   });
 
